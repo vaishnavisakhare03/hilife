@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
 import { getAllFeedbacks } from "../../api/feedbackApi";
+
+import {
+    FaUser,
+    FaThumbsUp,
+    FaThumbsDown,
+    FaCalendarAlt,
+    FaCommentAlt
+} from "react-icons/fa";
+
 import "./FeedbackList.css";
 
-function FeedbackList() {
+function FeedbackList({ type }) {
 
     const [feedbacks, setFeedbacks] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -15,55 +24,85 @@ function FeedbackList() {
         try {
             const response = await getAllFeedbacks();
             setFeedbacks(response.data);
+            setLoading(false);
         } catch (error) {
-            console.error("Error fetching feedbacks:", error);
-        } finally {
+            console.error(error);
             setLoading(false);
         }
     };
 
+    let filteredFeedbacks = [...feedbacks];
+
+    if (type === "liked") {
+        filteredFeedbacks.sort(
+            (a, b) => b.likesCount - a.likesCount
+        );
+    }
+
+    if (type === "disliked") {
+        filteredFeedbacks.sort(
+            (a, b) => b.dislikesCount - a.dislikesCount
+        );
+    }
+
+    if (loading) {
+        return <h2>Loading Feedbacks...</h2>;
+    }
+
     return (
         <div className="feedback-container">
 
-            <h2 className="feedback-title">Feedbacks</h2>
+            {filteredFeedbacks.map((feedback) => (
 
-            {loading ? (
-                <p className="loading-text">
-                    Loading feedbacks...
-                </p>
-            ) : feedbacks.length === 0 ? (
-                <p className="empty-text">
-                    No feedbacks available
-                </p>
-            ) : (
-                <div className="feedback-list">
+                <div
+                    key={feedback.id}
+                    className="feedback-item"
+                >
 
-                    {feedbacks.map((feedback) => (
+                    <div className="feedback-header">
+                        <h3>{feedback.title}</h3>
+                    </div>
 
-                        <div
-                            className="feedback-card"
-                            key={feedback.id}
-                        >
+                    <div className="feedback-info description">
+                        <FaCommentAlt />
+                        <span>{feedback.description}</span>
+                    </div>
 
-                            <h3 className="feedback-heading">
-                                {feedback.title}
-                            </h3>
+                    <div className="feedback-info user">
+                        <FaUser />
+                        <span>{feedback.postedBy}</span>
+                    </div>
 
-                            <p className="feedback-message">
-                                {feedback.description}
-                            </p>
+                    <div className="feedback-info date">
+                        <FaCalendarAlt />
+                        <span>
+                            {new Date(
+                                feedback.createdOn
+                            ).toLocaleString()}
+                        </span>
+                    </div>
 
-                            <p className="feedback-date">
-                                {new Date(
-                                    feedback.createdOn
-                                ).toLocaleString()}
-                            </p>
+                    <div className="feedback-reactions">
 
+                        <div className="reaction like">
+                            <FaThumbsUp />
+                            <span>
+                                {feedback.likesCount}
+                            </span>
                         </div>
-                    ))}
+
+                        <div className="reaction dislike">
+                            <FaThumbsDown />
+                            <span>
+                                {feedback.dislikesCount}
+                            </span>
+                        </div>
+
+                    </div>
 
                 </div>
-            )}
+
+            ))}
 
         </div>
     );

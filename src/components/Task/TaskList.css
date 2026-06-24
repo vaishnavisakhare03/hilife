@@ -1,0 +1,138 @@
+.task-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 24px;
+}
+
+.task-card {
+    background: white;
+    border-radius: 18px;
+    padding: 24px;
+
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+
+    transition: all 0.3s ease;
+}
+
+.task-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+}
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-header h3 {
+    margin: 0;
+    color: #0f172a;
+}
+
+.task-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.icon-btn {
+    border: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.edit-btn {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.delete-btn {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.status-badge {
+    display: inline-block;
+    margin-top: 12px;
+    margin-bottom: 18px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.planned {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.in_progress {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.completed {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.task-info {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    margin-bottom: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+}
+
+.description {
+    background: #f5f3ff;
+    color: #7c3aed;
+}
+
+.vendor {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.start-date {
+    background: #ecfdf5;
+    color: #16a34a;
+}
+
+.completion-date {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.progress-section {
+    margin-top: 20px;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.progress-bar {
+    height: 10px;
+    background: #e2e8f0;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        #2563eb,
+        #60a5fa
+    );
+    border-radius: 20px;
+    transition: width 0.4s ease;
+}

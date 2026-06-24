@@ -1,52 +1,83 @@
-/* FeedbackList.css */
-
 .feedback-container {
-    max-width: 800px;
-    margin: 30px auto;
-    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(380px, 1fr)
+    );
+    gap: 24px;
 }
 
-.feedback-title {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
+.feedback-item {
+    background: white;
+    border-radius: 18px;
+    padding: 24px;
+
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+
+    transition: all 0.3s ease;
 }
 
-.loading-text,
-.empty-text {
-    text-align: center;
-    color: #666;
-    font-size: 16px;
+.feedback-item:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 12px 30px rgba(15, 23, 42, 0.15);
 }
 
-.feedback-list {
+.feedback-header h3 {
+    margin-top: 0;
+    color: #0f172a;
+}
+
+.feedback-info {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+    gap: 12px;
+    align-items: center;
 
-.feedback-card {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
+    padding: 10px 14px;
     border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    margin-bottom: 12px;
 }
 
-.feedback-message {
-    font-size: 16px;
-    color: #222;
-    margin-bottom: 10px;
+.description {
+    background: #f5f3ff;
+    color: #7c3aed;
 }
 
-.feedback-user,
-.feedback-date {
-    font-size: 14px;
-    color: #666;
-    margin: 4px 0;
+.user {
+    background: #eff6ff;
+    color: #2563eb;
 }
 
-.feedback-heading {
-    margin-bottom: 10px;
-    color: #333;
+.date {
+    background: #ecfdf5;
+    color: #16a34a;
+}
+
+.feedback-reactions {
+    display: flex;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.reaction {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 14px;
+    border-radius: 20px;
+
+    font-weight: 600;
+}
+
+.like {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.dislike {
+    background: #fee2e2;
+    color: #dc2626;
 }
