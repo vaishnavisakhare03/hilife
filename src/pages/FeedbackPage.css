@@ -13,6 +13,7 @@
     display: flex;
     gap: 12px;
     margin-bottom: 24px;
+    justify-content: space-between;
 }
 
 .feedback-tabs button {
@@ -34,4 +35,112 @@
     background: #2563eb;
     color: white;
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.feedback-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.add-feedback-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    background: #2563eb;
+    color: white;
+
+    border: none;
+    border-radius: 12px;
+
+    padding: 12px 18px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.add-feedback-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 1000;
+}
+
+.feedback-modal {
+    width: 500px;
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 30px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.feedback-modal h2 {
+    color: #1e293b;
+}
+
+.feedback-modal input,
+.feedback-modal textarea {
+    width: 80%;
+    padding: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+}
+
+.feedback-modal input:focus,
+.feedback-modal textarea:focus {
+    border-color: #2563eb;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.cancel-btn {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.save-btn {
+    background: #2563eb;
+    color: white;
+}
+
+.cancel-btn,
+.save-btn {
+    border: none;
+    padding: 12px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
 }

@@ -13,6 +13,7 @@
     display: flex;
     gap: 12px;
     margin-bottom: 24px;
+    justify-content: space-between;
 }
 
 .event-tabs button {
@@ -24,6 +25,7 @@
     cursor: pointer;
     font-weight: 600;
     transition: all 0.3s ease;
+    margin-right: 8px;
 }
 
 button:hover {
@@ -36,4 +38,55 @@ button:hover {
     background: #2563eb;
     color: white;
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.add-event-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dialog-box {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 500px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.dialog-box input,
+.dialog-box textarea {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.dialog-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.save-btn {
+    padding: 10px 16px;
+}
+
+.cancel-btn {
+    padding: 10px 16px;
 }

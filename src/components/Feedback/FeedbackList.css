@@ -81,3 +81,33 @@
     background: #fee2e2;
     color: #dc2626;
 }
+
+.reaction.like.active {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.reaction.dislike.active {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.icon-btn.edit {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.icon-btn.delete {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f44336;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}

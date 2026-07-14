@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllEvents } from "../../api/eventApi";
+import { getAllEvents, updateEvent, deleteEvent } from "../../api/eventApi";
 import "./EventList.css";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import currentUser from "../../data/currentUser";
@@ -10,6 +10,7 @@ import {
   FaCalendarAlt,
   FaClock,
 } from "react-icons/fa";
+import { isAdmin } from "../../utils/auth";
 
 function EventList({ type }) {
   const [events, setEvents] = useState([]);
@@ -35,9 +36,15 @@ function EventList({ type }) {
     const eventStartTime = new Date(event.startTime);
     const currentTime = new Date();
 
-    return type === "completed"
-      ? eventStartTime < currentTime
-      : eventStartTime >= currentTime;
+    if (type === "completed") {
+      return eventStartTime < currentTime;
+    }
+
+    if (type === "upcoming") {
+      return eventStartTime >= currentTime;
+    }
+
+    return true;
   });
 
   if (loading) {
@@ -47,6 +54,71 @@ function EventList({ type }) {
       </div>
     );
   }
+
+  const handleEdit = async (event) => {
+    const updatedTitle = prompt("Enter event title", event.title);
+
+    if (!updatedTitle) return;
+
+    const updatedDescription = prompt(
+      "Enter event description",
+      event.description,
+    );
+
+    if (!updatedDescription) return;
+
+    const updatedStartTime = prompt(
+      "Enter start time (YYYY-MM-DDTHH:mm:ss)",
+      event.startTime,
+    );
+
+    if (!updatedStartTime) return;
+
+    const updatedEndTime = prompt(
+      "Enter end time (YYYY-MM-DDTHH:mm:ss)",
+      event.endTime,
+    );
+
+    if (!updatedEndTime) return;
+
+    const updatedHostedBy = prompt("Enter host organization", event.hostedBy);
+
+    if (!updatedHostedBy) return;
+
+    try {
+      const updatedEvent = {
+        title: updatedTitle,
+        description: updatedDescription,
+        startTime: updatedStartTime,
+        endTime: updatedEndTime,
+        hostedBy: updatedHostedBy,
+      };
+
+      await updateEvent(event.id, updatedEvent);
+
+      fetchEvents();
+    } catch (error) {
+      console.error("Error updating event", error);
+    }
+  };
+
+
+
+  const handleDelete = async (eventId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this event?",
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await deleteEvent(eventId);
+
+      setEvents(events.filter((event) => event.id !== eventId));
+    } catch (error) {
+      console.error("Error deleting event", error);
+    }
+  };
 
   return (
     <div className="page">
@@ -60,11 +132,17 @@ function EventList({ type }) {
                 <div className="button-container">
                   {isAdmin() && (
                     <>
-                      <button className="icon-btn edit">
+                      <button
+                        className="icon-btn edit"
+                        onClick={() => handleEdit(event)}
+                      >
                         <FaEdit />
                       </button>
 
-                      <button className="icon-btn delete">
+                      <button
+                        className="icon-btn delete"
+                        onClick={() => handleDelete(event.id)}
+                      >
                         <FaTrash />
                       </button>
                     </>

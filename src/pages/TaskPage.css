@@ -14,6 +14,7 @@
     gap: 12px;
     margin-bottom: 24px;
     flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .task-tabs button {
@@ -21,6 +22,7 @@
     background: #e2e8f0;
     color: #475569;
     padding: 10px 18px;
+    margin-right: 8px;
     border-radius: 10px;
     cursor: pointer;
     font-weight: 600;
@@ -37,4 +39,110 @@
     background: #2563eb;
     color: white;
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 1000;
+}
+
+/* .dialog-box {
+    background: white;
+    width: 400px;
+    max-height: 80vh;
+
+    padding: 20px;
+    border-radius: 12px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    overflow-y: auto;
+} */
+
+.dialog-box {
+    background: white;
+    width: 400px;
+    max-height: 80vh;
+
+    padding: 20px;
+    border-radius: 12px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    scrollbar-width: thin;              /* Firefox */
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.dialog-box input,
+.dialog-box textarea,
+.dialog-box select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.dialog-box textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.dialog-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding-top: 10px;
+}
+
+.save-btn,
+.cancel-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+
+.dialog-box::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dialog-box::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 10px 0;                     /* keeps scrollbar inside rounded corners */
+}
+
+.dialog-box::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.dialog-box::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+    background-clip: content-box;
 }

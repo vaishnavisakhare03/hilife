@@ -13,11 +13,17 @@ function LoginPage() {
         password,
       });
 
-      localStorage.setItem("currentUser", JSON.stringify(response.data));
+      localStorage.setItem("token", response.data.token);
 
-      navigate("/events");
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify({
+          id: response.data.id,
+          firstName: response.data.firstName,
+          role: response.data.role,
+        }),
+      );
 
-      console.log("User saved:", response.data);
     } catch (error) {
       console.error("Login failed", error);
     }

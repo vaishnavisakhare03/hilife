@@ -87,3 +87,41 @@
     background: #ecfdf5;
     color: #16a34a;
 }
+
+.member-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    color: #555;
+    font-size: 14px;
+}
+
+.member-role {
+    margin-top: 12px;
+    display: inline-block;
+    background: #2563eb;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.add-member-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #7a7e88;
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+
+.add-member-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}

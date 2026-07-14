@@ -16,11 +16,12 @@ export const createEvent = async (eventData) => {
 };
 
 // UPDATE event
-// export const updateEvent = async (id, eventData) => {
-//     return await api.put(`/events/${id}`, eventData);
-// };
+export const updateEvent = async (id, eventData) => {
+    return await api.put(`/events/${id}`, eventData);
+};
 
 // DELETE event
 export const deleteEvent = async (id) => {
     return await api.delete(`/events/${id}`);
 };
+
