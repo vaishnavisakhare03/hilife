@@ -8,6 +8,7 @@ import "./CommitteeList.css";
 import { getAllUsers } from "../../api/userApi";
 import { isAdmin } from "../../utils/auth";
 import { uploadImage } from "../../api/galleryApi";
+import ImageUpload from "../Image/ImageUpload"; 
 
 function CommitteeList() {
   const [members, setMembers] = useState([]);
@@ -158,11 +159,15 @@ function CommitteeList() {
                 <div>
                   <label>Photo</label>
 
-                  <input
+                  {/* <input
                     type="file"
                     accept="image/*"
                     onChange={(e) => setSelectedFile(e.target.files[0])}
-                  />
+                  /> */}
+
+                  <ImageUpload
+    onFileSelect={setSelectedFile}
+/>
                 </div>
 
                 <div className="member-contact">
