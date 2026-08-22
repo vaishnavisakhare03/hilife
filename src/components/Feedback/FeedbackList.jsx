@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { getAllFeedbacks } from "../../api/feedbackApi";
-
 import {
   FaUser,
   FaThumbsUp,
   FaThumbsDown,
   FaCalendarAlt,
   FaCommentAlt,
+  FaCamera,
+  FaEdit,
+  FaTrash,
 } from "react-icons/fa";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import {} from "react-icons/fa";
 import "./FeedbackList.css";
 import {
   likeFeedback,
@@ -17,12 +19,18 @@ import {
   updateFeedback,
   deleteFeedback,
 } from "../../api/feedbackApi";
-
 import { isAdmin } from "../../utils/auth";
+import ImageUpload from "../Image/ImageUpload";
+import { uploadImage, deleteImage } from "../../api/galleryApi";
 
 function FeedbackList({ type }) {
   const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedFeedbackId, setSelectedFeedbackId] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [showUploadDialog, setShowUploadDialog] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     fetchFeedbacks();
@@ -107,6 +115,31 @@ function FeedbackList({ type }) {
     }
   };
 
+  const handleUploadPhoto = async () => {
+    if (!selectedFile) return;
+
+    const formData = new FormData();
+
+    formData.append("file", selectedFile);
+
+    formData.append("entityType", "FEEDBACK");
+
+    formData.append("parentEntityId", selectedFeedbackId);
+
+    formData.append(
+      "postedBy",
+      JSON.parse(localStorage.getItem("currentUser")).firstName,
+    );
+
+    await uploadImage(formData);
+
+    fetchFeedbacks();
+
+    setShowUploadDialog(false);
+
+    setSelectedFile(null);
+  };
+
   let filteredFeedbacks = [...feedbacks];
 
   if (type === "mine") {
@@ -120,77 +153,138 @@ function FeedbackList({ type }) {
   }
 
   if (filteredFeedbacks.length === 0) {
-  return (
-    <div className="empty-feedback">
-      No feedback found.
-    </div>
-  );
-}
-
+    return <div className="empty-feedback">No feedback found.</div>;
+  }
 
   return (
     <div className="feedback-container">
-     {filteredFeedbacks.map((feedback) => (
-        <div key={feedback.id} className="feedback-item">
-          <div className="feedback-header">
-            <div>
-              <h3>{feedback.title}</h3>
-            </div>
-            <div className="button-container">
-              {feedback.postedByUserId === currentUser?.id && (
-                <button
-                  className="icon-btn edit"
-                  onClick={() => handleEdit(feedback)}
-                >
-                  <FaEdit />
-                </button>
-              )}
+      {filteredFeedbacks.map((item) => {
+        const feedback = item.feedback;
+        const photos = item.photos;
 
-              {(feedback.postedByUserId === currentUser?.id || isAdmin()) && (
-                <button
-                  className="icon-btn delete"
-                  onClick={() => handleDelete(feedback.id)}
-                >
-                  <FaTrash />
-                </button>
-              )}
-            </div>
-          </div>
+        return (
+          <div key={feedback.id} className="feedback-item">
+            <div className="feedback-header">
+              <div>
+                <h3>{feedback.title}</h3>
+              </div>
+              <div className="button-container">
+                {feedback.postedByUserId === currentUser?.id && (
+                  <>
+                    <button
+                      className="icon-btn edit"
+                      onClick={() => handleEdit(feedback)}
+                    >
+                      <FaEdit />
+                    </button>
 
-          <div className="feedback-info description">
-            <FaCommentAlt />
-            <span>{feedback.description}</span>
-          </div>
+                    <button
+                      className="icon-btn camera"
+                      onClick={() => {
+                        setSelectedFeedbackId(feedback.id);
+                        setSelectedFile(null);
+                        setShowUploadDialog(true);
+                      }}
+                    >
+                      <FaCamera />
+                    </button>
+                  </>
+                )}
 
-          <div className="feedback-info user">
-            <FaUser />
-            <span>{feedback.postedBy}</span>
-          </div>
-
-          <div className="feedback-info date">
-            <FaCalendarAlt />
-            <span>{new Date(feedback.createdOn).toLocaleString()}</span>
-          </div>
-
-          <div className="feedback-reactions">
-            <div
-              className="reaction like"
-              onClick={() => handleLike(feedback.id)}
-            >
-              <FaThumbsUp />
-              <span>{feedback.likesCount}</span>
+                {(feedback.postedByUserId === currentUser?.id || isAdmin()) && (
+                  <button
+                    className="icon-btn delete"
+                    onClick={() => handleDelete(feedback.id)}
+                  >
+                    <FaTrash />
+                  </button>
+                )}
+              </div>
             </div>
 
-            <div
-              className="reaction dislike"
-              onClick={() => handleDislike(feedback.id)}
-            >
-              <FaThumbsDown />
-              <span>{feedback.dislikesCount}</span>
+            {photos?.length > 0 && (
+              <div className="gallery">
+                {photos.map((photo) => (
+                  <div key={photo.id} className="gallery-item">
+                    <img
+                      src={photo.imageUrl}
+                      className="feedback-image"
+                      alt="Feedback"
+                    />
+
+                    {isAdmin() && (
+                      <button
+                        className="delete-photo-btn"
+                        onClick={() => handleDeletePhoto(photo.id)}
+                      >
+                        <FaTrash />
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="feedback-info description">
+              <FaCommentAlt />
+              <span>{feedback.description}</span>
+            </div>
+
+            <div className="feedback-info user">
+              <FaUser />
+              <span>{feedback.postedBy}</span>
+            </div>
+
+            <div className="feedback-info date">
+              <FaCalendarAlt />
+              <span>{new Date(feedback.createdOn).toLocaleString()}</span>
+            </div>
+
+            <div className="feedback-reactions">
+              <div
+                className="reaction like"
+                onClick={() => handleLike(feedback.id)}
+              >
+                <FaThumbsUp />
+                <span>{feedback.likesCount}</span>
+              </div>
+
+              <div
+                className="reaction dislike"
+                onClick={() => handleDislike(feedback.id)}
+              >
+                <FaThumbsDown />
+                <span>{feedback.dislikesCount}</span>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+      
+      {showUploadDialog && (
+        <div className="dialog-overlay">
+          <div className="dialog-box">
+            <h2>Upload Feedback Photo</h2>
+
+            <ImageUpload onFileSelect={setSelectedFile} />
+
+            {/* upload progress */}
+
+            <div className="dialog-buttons">
+              <button onClick={handleUploadPhoto}>Upload</button>
+
+              <button
+                onClick={() => {
+                  setShowUploadDialog(false);
+                  setSelectedFile(null);
+                }}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
-      ))}
+      )}
     </div>
   );
 }

@@ -1,19 +1,14 @@
-// import axios from "axios";
-
-// const api = axios.create({
-//     baseURL: "http://localhost:8080", // Spring Boot URL
-//     headers: {
-//         "Content-Type": "application/json",
-//     },
-// });
-
-// export default api;
-
 import axios from "axios";
 
 const api = axios.create({
     baseURL: "http://localhost:8080"
 });
+
+export const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("currentUser");
+  window.location.href = "/login";
+};
 
 api.interceptors.request.use(
     (config) => {
@@ -28,7 +23,13 @@ api.interceptors.request.use(
         return config;
     },
     (error) => {
-        return Promise.reject(error);
+        if (error.response?.status === 401 ||
+        error.response?.status === 403) {
+
+      logout();
+    }
+
+    return Promise.reject(error);
     }
 );
 

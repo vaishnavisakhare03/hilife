@@ -7,3 +7,11 @@ export const isAdmin = () => {
     const user = getCurrentUser();
     return user?.role === "ADMIN";
 };
+
+export const isLoggedIn = () => {
+
+  const token = localStorage.getItem("token");
+  const currentUser = localStorage.getItem("currentUser");
+
+  return !!(token && currentUser);
+};

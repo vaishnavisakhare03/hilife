@@ -2,91 +2,52 @@ import { useState, useEffect } from "react";
 import "./ImageUpload.css";
 
 function ImageUpload({ onFileSelect }) {
+  const [preview, setPreview] = useState(null);
+  const [fileName, setFileName] = useState("");
 
-    const [preview, setPreview] = useState(null);
-    const [fileName, setFileName] = useState("");
+  const handleChange = (e) => {
+    const file = e.target.files[0];
 
-    const handleChange = (e) => {
+    if (!file) return;
 
-        const file = e.target.files[0];
+    setPreview(URL.createObjectURL(file));
 
-        if (!file) return;
+    setFileName(file.name);
 
-        setPreview(URL.createObjectURL(file));
+    onFileSelect(file);
+  };
 
-        setFileName(file.name);
-
-        onFileSelect(file);
+  useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
     };
+  }, [preview]);
 
-    useEffect(() => {
+  return (
+    <div className="image-upload">
+      <label className="upload-box">
+        <input hidden type="file" accept="image/*" onChange={handleChange} />
 
-        return () => {
+        {preview ? (
+          <>
+            <img src={preview} alt="Preview" className="preview-image" />
 
-            if (preview) {
-                URL.revokeObjectURL(preview);
-            }
+            <span className="change-photo">Change Image</span>
+          </>
+        ) : (
+          <>
+            <div className="camera-icon">📷</div>
 
-        };
+            <p>Select Image</p>
+          </>
+        )}
+      </label>
 
-    }, [preview]);
-
-    return (
-
-        <div className="image-upload">
-
-            <label className="upload-box">
-
-                <input
-                    hidden
-                    type="file"
-                    accept="image/*"
-                    onChange={handleChange}
-                />
-
-                {preview ? (
-
-                    <>
-                        <img
-                            src={preview}
-                            alt="Preview"
-                            className="preview-image"
-                        />
-
-                        <span className="change-photo">
-                            Change Image
-                        </span>
-
-                    </>
-
-                ) : (
-
-                    <>
-                        <div className="camera-icon">
-                            📷
-                        </div>
-
-                        <p>Select Image</p>
-                    </>
-
-                )}
-
-            </label>
-
-            {fileName && (
-
-                <div className="selected-file">
-
-                    {fileName}
-
-                </div>
-
-            )}
-
-        </div>
-
-    );
-
+      {fileName && <div className="selected-file">{fileName}</div>}
+    </div>
+  );
 }
 
 export default ImageUpload;

@@ -2,27 +2,24 @@ import { useEffect, useState } from "react";
 import {
   getAllCommitteeMembers,
   createCommitteeMember,
+  deleteCommitteeMember,
 } from "../../api/committeeApi";
-import { FaPhone, FaUserTie, FaPlus } from "react-icons/fa";
+import { FaPhone, FaUserTie, FaPlus, FaTrash } from "react-icons/fa";
 import "./CommitteeList.css";
 import { getAllUsers } from "../../api/userApi";
 import { isAdmin } from "../../utils/auth";
 import { uploadImage } from "../../api/galleryApi";
-import ImageUpload from "../Image/ImageUpload"; 
+import ImageUpload from "../Image/ImageUpload";
 
 function CommitteeList() {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [showDialog, setShowDialog] = useState(false);
-
   const [users, setUsers] = useState([]);
-
   const [newMember, setNewMember] = useState({
     userId: "",
     position: "",
   });
-
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
@@ -43,72 +40,63 @@ function CommitteeList() {
 
   const handleAddMember = async () => {
     const response = await getAllUsers();
-
     setUsers(response.data);
-
     setShowDialog(true);
   };
 
   const handleSave = async () => {
-  try {
+    try {
+      let photoId = null;
 
-    let photoId = null;
+      if (selectedFile) {
+        const formData = new FormData();
 
-    if (selectedFile) {
+        formData.append("file", selectedFile);
 
-      const formData = new FormData();
+        formData.append("entityType", "COMMITTEE");
 
-      formData.append(
-        "file",
-        selectedFile
-      );
+        formData.append("parentEntityId", 0);
 
-      formData.append(
-        "entityType",
-        "COMMITTEE"
-      );
+        formData.append("postedBy", "Admin");
 
-      formData.append(
-        "parentEntityId",
-        0
-      );
+        const uploadResponse = await uploadImage(formData);
 
-      formData.append(
-        "postedBy",
-        "Admin"
-      );
+        photoId = uploadResponse.data.id;
+      }
 
-      const uploadResponse =
-        await uploadImage(formData);
+      await createCommitteeMember({
+        ...newMember,
+        photoId,
+      });
 
-      photoId =
-        uploadResponse.data.id;
+      setShowDialog(false);
+
+      setNewMember({
+        userId: "",
+        position: "",
+      });
+
+      setSelectedFile(null);
+
+      fetchMembers();
+    } catch (error) {
+      console.error("Error adding member", error);
+    }
+  };
+
+  const handleDelete = async (memberId) => {
+    if (!window.confirm("Delete this committee member?")) {
+      return;
     }
 
-    await createCommitteeMember({
-      ...newMember,
-      photoId,
-    });
+    try {
+      await deleteCommitteeMember(memberId);
 
-    setShowDialog(false);
-
-    setNewMember({
-      userId: "",
-      position: "",
-    });
-
-    setSelectedFile(null);
-
-    fetchMembers();
-
-  } catch (error) {
-
-    console.error(
-      "Error adding member",
-      error
-    );
-  }
-};
+      fetchMembers();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   if (loading) {
     return <h2>Loading Committee...</h2>;
@@ -135,39 +123,24 @@ function CommitteeList() {
                     alt={member.userName}
                     className="member-photo"
                   />
+
+                  <div className="committee-actions">
+                    {isAdmin() && (
+                      <button
+                        className="icon-btn delete"
+                        onClick={() => handleDelete(member.id)}
+                      >
+                        <FaTrash />
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <h3 className="member-name">{member.userName}</h3>
 
                 <div className="member-position">
                   <FaUserTie />
-                  <label>Position</label>
-
-                  <input
-                    type="text"
-                    placeholder="Chairman / Secretary"
-                    value={newMember.position}
-                    onChange={(e) =>
-                      setNewMember({
-                        ...newMember,
-                        position: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-
-                <div>
-                  <label>Photo</label>
-
-                  {/* <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setSelectedFile(e.target.files[0])}
-                  /> */}
-
-                  <ImageUpload
-    onFileSelect={setSelectedFile}
-/>
+                  <span>{member.position}</span>
                 </div>
 
                 <div className="member-contact">
@@ -235,12 +208,28 @@ function CommitteeList() {
               }
             />
 
+            <div>
+              <label>Photo</label>
+
+              {/* <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setSelectedFile(e.target.files[0])}
+                  /> */}
+
+              <ImageUpload onFileSelect={setSelectedFile} />
+            </div>
+
             <div className="dialog-buttons">
-              <button onClick={handleSave}>Save</button>
+              <button className="upload-btn" onClick={handleSave}>
+                Save
+              </button>
 
               <button
+                className="cancel-btn"
                 onClick={() => {
                   setShowDialog(false);
+                  setSelectedFile(null);
                 }}
               >
                 Cancel

@@ -125,3 +125,14 @@
     background: #1d4ed8;
     transform: translateY(-2px);
 }
+
+.committee-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.committee-actions .icon-btn {
+    width: 36px;
+    height: 36px;
+}

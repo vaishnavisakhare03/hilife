@@ -13,7 +13,7 @@ export const createCommitteeMember = (committee) => {
 };
 
 export const deleteCommitteeMember = (id) => {
-    return api.delete(`/committee/${id}`);
+  return api.delete(`/committee/${id}`);
 };
 
 export const updateCommitteeMember = (id, committee) => {

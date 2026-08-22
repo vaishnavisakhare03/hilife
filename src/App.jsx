@@ -4,9 +4,9 @@ import TaskPage from "./pages/TaskPage";
 import FeedbackPage from "./pages/FeedbackPage";
 import CommitteePage from "./pages/CommitteePage";
 import LoginPage from "./pages/LoginPage";
-
+import ProfilePage from "./pages/ProfilePage";
 import Navbar from "./components/Navbar/Navbar";
-
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"
 import { Routes, Route } from "react-router-dom";
 
 function App() {
@@ -23,6 +23,14 @@ function App() {
           <Route path="/tasks" element={<TaskPage />} />
           <Route path="/feedbacks" element={<FeedbackPage />} />
           <Route path="/committee" element={<CommitteePage />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </div>
     </>

@@ -1,12 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { loginUser } from "../api/userApi";
 import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import "./LoginPage.css";
 
 function LoginPage() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      navigate("/events");
+    }
+  }, [navigate]);
 
   const handleLogin = async () => {
+    setLoading(true);
+    setError("");
+
     try {
       const response = await loginUser({
         phoneNumber,
@@ -24,32 +42,53 @@ function LoginPage() {
         }),
       );
 
+      navigate("/events");
     } catch (error) {
-      console.error("Login failed", error);
+      console.error(error);
+
+      setError("Invalid phone number or password.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const navigate = useNavigate();
-
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="login-page">
+      <div className="login-card">
+        <h1 className="login-title">HiLife</h1>
 
-      <input
-        type="text"
-        placeholder="Phone Number"
-        value={phoneNumber}
-        onChange={(e) => setPhoneNumber(e.target.value)}
-      />
+        <p className="login-subtitle">Community Management Platform</p>
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <div className="login-form">
+          <input
+            type="text"
+            placeholder="Phone Number"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+          />
 
-      <button onClick={handleLogin}>Login</button>
+          <div className="password-field">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <button
+              type="button"
+              className="toggle-password"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
+          {error && <p className="login-error">{error}</p>}
+          <button onClick={handleLogin} disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

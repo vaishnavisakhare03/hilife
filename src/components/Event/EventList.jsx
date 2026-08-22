@@ -269,9 +269,9 @@ function EventList({ type }) {
                   </div>
 
                   {photos.length > 0 && (
-                    <div className="event-gallery">
+                    <div className="gallery">
                       {photos.map((photo) => (
-                        <div key={photo.id} className="photo-card">
+                        <div key={photo.id} className="gallery-item">
                           <img
                             src={photo.imageUrl}
                             alt="Event"

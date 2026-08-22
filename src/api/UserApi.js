@@ -7,3 +7,18 @@ export const loginUser = (credentials) => {
 export const getAllUsers = () => {
     return api.get("/users");
 };
+
+export const getUserById = (id) => {
+  return api.get(`/users/${id}`);
+};
+
+export const updateUser = (id, user) => {
+  return api.put(`/users/${id}`, user);
+};
+
+export const changePassword = (userId, data) => {
+  return api.put(
+    `/users/${userId}/change-password`,
+    data
+  );
+};
