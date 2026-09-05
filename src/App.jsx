@@ -7,6 +7,7 @@ import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 import Navbar from "./components/Navbar/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"
+import Dashboard from "./pages/Dashboard";
 import { Routes, Route } from "react-router-dom";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
 
       <div style={{ paddingTop: "70px" }}>
         <Routes>
+          <Route path="/" element={<Dashboard />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/events/:id" element={<EventDetailsPage />} />

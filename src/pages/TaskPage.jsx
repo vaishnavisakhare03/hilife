@@ -3,13 +3,25 @@ import "./TaskPage.css";
 import { useState } from "react";
 import { isAdmin } from "../utils/auth";
 import { createTask, updateTask, deleteTask } from "../api/taskApi";
+import { useSearchParams } from "react-router-dom";
 
 function TaskPage() {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState(null);
 
-  const [activeTab, setActiveTab] = useState("planned");
+  const [searchParams] = useSearchParams();
+
+  const [activeTab, setActiveTab] = useState(() => {
+    const status = searchParams.get("status");
+
+    if (status === "IN_PROGRESS") {
+      return "in-progress";
+    }
+
+    return "planned";
+  });
+
   const [newTask, setNewTask] = useState({
     title: "",
     description: "",
@@ -26,9 +38,9 @@ function TaskPage() {
     setShowAddDialog(false);
 
     window.location.reload();
-};
+  };
 
-const handleUpdateTask = async () => {
+  const handleUpdateTask = async () => {
     await updateTask(editingTaskId, newTask);
 
     setShowAddDialog(false);
@@ -37,8 +49,7 @@ const handleUpdateTask = async () => {
     setEditingTaskId(null);
 
     window.location.reload();
-};
-
+  };
 
   const handleEditTask = (task) => {
     setIsEditMode(true);

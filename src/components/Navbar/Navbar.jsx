@@ -25,7 +25,7 @@ function Navbar() {
 
     navigate("/login");
   };
-  
+
   const user = getCurrentUser();
   const handleChangePassword = async () => {
     try {
@@ -64,6 +64,7 @@ function Navbar() {
       </div>
 
       <div className="nav-links">
+        <NavLink to="/">Dashboard</NavLink>
         <NavLink to="/events">Events</NavLink>
         <NavLink to="/tasks">Tasks</NavLink>
         <NavLink to="/feedbacks">Feedbacks</NavLink>
