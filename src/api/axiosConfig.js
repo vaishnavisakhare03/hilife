@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:8080"
+  baseURL: "http://localhost:8080",
 });
 
 export const logout = () => {
@@ -11,26 +11,22 @@ export const logout = () => {
 };
 
 api.interceptors.request.use(
-    (config) => {
+  (config) => {
+    const token = localStorage.getItem("token");
+    console.log("JWT TOKEN:", token);
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
 
-        const token = localStorage.getItem("token");
-
-        if (token) {
-            config.headers.Authorization =
-                `Bearer ${token}`;
-        }
-
-        return config;
-    },
-    (error) => {
-        if (error.response?.status === 401 ||
-        error.response?.status === 403) {
-
+    return config;
+  },
+  (error) => {
+    if (error.response?.status === 401 || error.response?.status === 403) {
       logout();
     }
 
     return Promise.reject(error);
-    }
+  },
 );
 
 export default api;

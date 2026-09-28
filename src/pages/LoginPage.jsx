@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { loginUser } from "../api/userApi";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import "./LoginPage.css";
 
 function LoginPage() {
@@ -82,6 +83,11 @@ function LoginPage() {
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
+          </div>
+
+          <div className="register-link">
+            Don't have an account?
+            <Link to="/register"> Sign up</Link>
           </div>
           {error && <p className="login-error">{error}</p>}
           <button onClick={handleLogin} disabled={loading}>
