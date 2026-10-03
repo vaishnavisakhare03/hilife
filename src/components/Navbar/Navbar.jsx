@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { changePassword } from "../../api/userApi";
+import { changePassword } from "../../api/UserApi";
 import { isLoggedIn } from "../../utils/auth";
 import { getCurrentUser } from "../../utils/auth";
 import "./Navbar.css";
