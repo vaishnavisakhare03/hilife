@@ -3,7 +3,7 @@ import {
   getAllCommitteeMembers,
   createCommitteeMember,
   deleteCommitteeMember,
-} from "../../api/committeeApi";
+} from "../../api/CommitteeApi";
 import { FaPhone, FaUserTie, FaPlus, FaTrash } from "react-icons/fa";
 import "./CommitteeList.css";
 import { getAllUsers } from "../../api/UserApi";
