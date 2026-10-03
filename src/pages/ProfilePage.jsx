@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getUserById, updateUser } from "../api/userApi";
+import { getUserById, updateUser } from "../api/UserApi";
 import ImageUpload from "../components/Image/ImageUpload";
 import { uploadImage } from "../api/galleryApi";
 import "./ProfilePage.css";

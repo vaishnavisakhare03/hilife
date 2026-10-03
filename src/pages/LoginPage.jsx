@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { loginUser } from "../api/userApi";
+import { loginUser } from "../api/UserApi";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";

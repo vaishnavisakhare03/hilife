@@ -6,7 +6,7 @@ import {
 } from "../../api/committeeApi";
 import { FaPhone, FaUserTie, FaPlus, FaTrash } from "react-icons/fa";
 import "./CommitteeList.css";
-import { getAllUsers } from "../../api/userApi";
+import { getAllUsers } from "../../api/UserApi";
 import { isAdmin } from "../../utils/auth";
 import { uploadImage } from "../../api/galleryApi";
 import ImageUpload from "../Image/ImageUpload";
